@@ -36,5 +36,9 @@ Tema: membuat Kubernetes cluster dengan Rancher (contoh 3 VM: master + worker).
 ## Identitas
 
 - **Nama:** Hanry Roslaw Saputra
-- **NIM:** 13020321233123
+- **NIM:** 250401010331
+- **Mata kuliah:** Pemrograman Web I
+
+- **Nama:** Iin Wahyuni
+- **NIM:** 250401010332
 - **Mata kuliah:** Pemrograman Web I
