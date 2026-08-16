@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Media — EduRancher Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+</head>
+<body data-page="media">
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg navbar-dark container py-3">
+      <a class="navbar-brand brand-lockup" href="index.html">
+        <span class="brand-mark">K8s</span>
+        <span><strong>EduRancher Lab</strong><br><small class="opacity-75">Pemrograman Web I · UNSIA</small></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" data-nav="beranda" href="index.html">Beranda</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="konsep" href="konsep.html">Konsep</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="arsitektur" href="arsitektur.html">Arsitektur</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="panduan" href="panduan.html">Panduan</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="media" href="media.html">Media</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="praktik" href="praktik.html">Praktik</a></li>
+        </ul>
+        <span id="live-clock" class="ms-lg-3"></span>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container py-4 py-lg-5">
+    <header class="mb-4">
+      <h1>Media Pembelajaran</h1>
+      <p class="lead">Demonstrasi elemen <code>&lt;video&gt;</code> dan <code>&lt;audio&gt;</code> (Materi Sesi 11 &amp; 12).</p>
+    </header>
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <article class="section-card">
+          <h2 class="h5">Video HTML5 — contoh pemutar lokal</h2>
+          <p>
+            Tag <strong>video</strong> menampilkan pemutar bawaan browser. Atribut
+            <code>controls</code>, <code>poster</code> (opsional), dan beberapa sumber format meningkatkan kompatibilitas.
+          </p>
+          <div class="media-frame mb-3">
+            <video class="w-100" controls preload="metadata" poster="assets/images/arsitektur-3vm.png">
+              <source src="assets/video/demo-cluster.mp4" type="video/mp4">
+              <source src="assets/video/demo-cluster.webm" type="video/webm">
+              Browser Anda tidak mendukung elemen video HTML5.
+            </video>
+          </div>
+          <p class="small text-secondary mb-0">
+            File contoh bersifat demonstrasi elemen media. Ganti dengan rekaman lab Anda sendiri saat presentasi.
+          </p>
+        </article>
+      </div>
+
+      <div class="col-lg-5">
+        <article class="section-card h-100">
+          <h2 class="h5">Audio HTML5 — intro lab</h2>
+          <p>
+            Tag <strong>audio</strong> dipakai untuk narasi singkat atau sinyal pembuka modul.
+            Contoh di bawah menggunakan berkas WAV hasil generate untuk demo kontrol pemutar.
+          </p>
+          <audio class="w-100 mb-3" controls>
+            <source src="assets/audio/intro-rancher.wav" type="audio/wav">
+            Browser Anda tidak mendukung elemen audio HTML5.
+          </audio>
+          <h3 class="h6">Atribut penting</h3>
+          <ul class="mb-0">
+            <li><code>controls</code> — tampilkan tombol play/pause</li>
+            <li><code>preload</code> — strategi muat metadata/berkas</li>
+            <li>Beberapa <code>&lt;source&gt;</code> untuk fallback format</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+
+    <section class="section-card mt-4">
+      <h2 class="h5">Video referensi eksternal (embed)</h2>
+      <p>
+        Selain file lokal, konten edukasi sering disematkan dari platform video.
+        Contoh embed di bawah memakai materi publik tentang Rancher / Kubernetes
+        (<a href="https://www.youtube.com/watch?v=_CRjSf8i7Vo" target="_blank" rel="noopener">What is Rancher?</a>).
+      </p>
+      <!--
+        Penting: buka halaman via http://localhost (Live Server), bukan file://.
+        YouTube memblokir embed jika tidak ada Referer HTTP (sering muncul Error 153 / kotak hitam).
+        Pakai path /embed/ID — bukan /watch?v=ID.
+      -->
+      <div class="ratio ratio-16x9 media-frame">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/_CRjSf8i7Vo"
+          title="What is Rancher? | Kubernetes Made Easy! | Episode 1"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+          loading="lazy"></iframe>
+      </div>
+      <p class="small text-secondary mt-3 mb-2">
+        Jika muncul kotak hitam / Error 153 saat dibuka lewat <code>file://</code>, jalankan via Live Server
+        (<code>http://localhost</code>) agar browser mengirim Referer ke YouTube.
+      </p>
+      <p class="small text-secondary mb-0">
+        Cadangan tautan langsung:
+        <a href="https://www.youtube.com/watch?v=_CRjSf8i7Vo" target="_blank" rel="noopener">buka di YouTube</a>.
+        Untuk vlog sendiri, ganti <code>src</code> iframe menjadi
+        <code>https://www.youtube-nocookie.com/embed/ID_VIDEO_ANDA</code>.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer py-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <div><strong>EduRancher Lab</strong><br><small>Hanry Roslaw Saputra · 13020321233123 · IF203</small></div>
+      <div class="small">Pemrograman Web I · Riad Sahara, S.SI., M.T.</div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panduan — EduRancher Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+</head>
+<body data-page="panduan">
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg navbar-dark container py-3">
+      <a class="navbar-brand brand-lockup" href="index.html">
+        <span class="brand-mark">K8s</span>
+        <span><strong>EduRancher Lab</strong><br><small class="opacity-75">Pemrograman Web I · UNSIA</small></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" data-nav="beranda" href="index.html">Beranda</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="konsep" href="konsep.html">Konsep</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="arsitektur" href="arsitektur.html">Arsitektur</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="panduan" href="panduan.html">Panduan</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="media" href="media.html">Media</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="praktik" href="praktik.html">Praktik</a></li>
+        </ul>
+        <span id="live-clock" class="ms-lg-3"></span>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container py-4 py-lg-5">
+    <header class="mb-4">
+      <h1>Panduan: Cluster K8s dengan Rancher (3 VM)</h1>
+      <p class="lead">Dari persiapan VM hingga cluster <mark>Ready</mark> — lengkap dengan perintah CLI.</p>
+    </header>
+
+    <figure class="section-card mb-4 p-3">
+      <img src="assets/images/alur-rancher.png" class="img-fluid rounded" width="1100" height="420" alt="Alur lima langkah lab Rancher 3 VM">
+      <figcaption class="mt-2 text-secondary">Gambar. Alur lab: siapkan VM → install Rancher → create cluster → join nodes → verifikasi.</figcaption>
+    </figure>
+
+    <figure class="section-card mb-4 p-3">
+      <img src="assets/images/cli-preview.png" class="img-fluid rounded" width="1100" height="360" alt="Contoh tampilan perintah CLI di terminal">
+      <figcaption class="mt-2 text-secondary">Gambar. Pratinjau perintah CLI yang akan Anda jalankan di lab.</figcaption>
+    </figure>
+
+    <aside class="toc-aside mb-4">
+      <h2 class="h6">Asumsi lab edukasi</h2>
+      <ul class="mb-2">
+        <li>OS: Ubuntu Server 22.04 pada ketiga VM</li>
+        <li>Contoh IP privat: Master <code>192.168.56.11</code>, Worker1 <code>192.168.56.12</code>, Worker2 <code>192.168.56.13</code></li>
+        <li>Rancher dijalankan di host terpisah atau VM tambahan dengan Docker</li>
+        <li>Ganti nilai dalam tanda <code>&lt;...&gt;</code> sesuai lingkungan Anda</li>
+      </ul>
+      <p class="small text-secondary mb-0">Perintah di bawah bersifat edukasi lab; sesuaikan versi Rancher/K8s dengan dokumentasi resmi saat praktik.</p>
+    </aside>
+
+    <!-- STEP 1 -->
+    <article class="section-card mb-4" id="step-1">
+      <h2 class="h5"><span class="step-badge">1</span>Siapkan tiga VM (hostname, update, SSH)</h2>
+      <p>Buat 3 VM di VirtualBox/VMware/Proxmox. Di <strong>setiap</strong> VM, update sistem dan pasang tools dasar:</p>
+      <pre class="code-block"><code>sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl wget vim net-tools openssh-server
+sudo systemctl enable --now ssh</code></pre>
+
+      <h3 class="h6 mt-3">Set hostname per VM</h3>
+      <p><strong>VM-1 (Master):</strong></p>
+      <pre class="code-block"><code>sudo hostnamectl set-hostname k8s-master
+echo "192.168.56.11 k8s-master" | sudo tee -a /etc/hosts</code></pre>
+      <p><strong>VM-2 (Worker-1):</strong></p>
+      <pre class="code-block"><code>sudo hostnamectl set-hostname k8s-worker1
+echo "192.168.56.12 k8s-worker1" | sudo tee -a /etc/hosts</code></pre>
+      <p><strong>VM-3 (Worker-2):</strong></p>
+      <pre class="code-block"><code>sudo hostnamectl set-hostname k8s-worker2
+echo "192.168.56.13 k8s-worker2" | sudo tee -a /etc/hosts</code></pre>
+
+      <h3 class="h6 mt-3">Opsional: IP statis (Netplan contoh)</h3>
+      <pre class="code-block"><code># edit lalu apply — sesuaikan nama NIC (ip a)
+sudo nano /etc/netplan/00-installer-config.yaml
+sudo netplan apply
+ip a</code></pre>
+
+      <h3 class="h6 mt-3">Uji konektivitas antar VM</h3>
+      <pre class="code-block"><code>ping -c 3 192.168.56.11
+ping -c 3 192.168.56.12
+ping -c 3 192.168.56.13
+ssh user@192.168.56.11</code></pre>
+    </article>
+
+    <!-- STEP 2 -->
+    <article class="section-card mb-4" id="step-2">
+      <h2 class="h5"><span class="step-badge">2</span>Install Docker &amp; jalankan Rancher</h2>
+      <p>Pada <strong>host Rancher</strong> (bisa VM ke-4 atau laptop lab yang cukup RAM), install Docker lalu jalankan Rancher Server:</p>
+      <pre class="code-block"><code># Install Docker (Ubuntu)
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER
+newgrp docker
+docker version</code></pre>
+
+      <p>Jalankan Rancher (contoh lab — port 80/443):</p>
+      <pre class="code-block"><code>sudo docker run -d --restart=unless-stopped \
+  --name rancher \
+  -p 80:80 -p 443:443 \
+  --privileged \
+  rancher/rancher:latest</code></pre>
+
+      <p>Cek kontainer dan log bootstrap (password awal ada di log):</p>
+      <pre class="code-block"><code>sudo docker ps
+sudo docker logs rancher 2>&amp;1 | grep "Bootstrap Password"
+# atau
+sudo docker exec -it rancher reset-password</code></pre>
+
+      <ol>
+        <li>Buka browser: <code>https://&lt;IP-HOST-RANCHER&gt;</code></li>
+        <li>Login dengan bootstrap password</li>
+        <li>Set password admin baru</li>
+        <li>Masuk dashboard Rancher</li>
+      </ol>
+      <p class="mb-0 small text-secondary">Referensi: <a href="https://ranchermanager.docs.rancher.com/" target="_blank" rel="noopener">Rancher Manager Docs</a></p>
+    </article>
+
+    <!-- STEP 3 -->
+    <article class="section-card mb-4" id="step-3">
+      <h2 class="h5"><span class="step-badge">3</span>Buat cluster &amp; daftarkan node Master</h2>
+      <p>Di UI Rancher:</p>
+      <ol>
+        <li>Menu <strong>Cluster Management</strong> → <strong>Create</strong></li>
+        <li>Pilih <strong>Custom</strong> (karena node Anda adalah VM sendiri)</li>
+        <li>Isi nama cluster, misalnya <code>lab-3vm</code></li>
+        <li>Centang peran untuk perintah master: <mark>etcd</mark> + <mark>Control Plane</mark></li>
+        <li>Salin perintah registrasi yang muncul (berisi <code>curl ... | sh</code>)</li>
+      </ol>
+
+      <p>Contoh bentuk perintah (token/URL diganti milik Anda):</p>
+      <pre class="code-block"><code># Jalankan di VM-1 (k8s-master)
+curl -fL https://&lt;IP-RANCHER&gt;/v3/import/&lt;TOKEN&gt;.yaml | sudo kubectl apply -f -
+
+# atau format agent installer (tergantung versi Rancher), mirip:
+curl -fL https://&lt;IP-RANCHER&gt;/system-agent-install.sh | sudo sh -s - \
+  --server https://&lt;IP-RANCHER&gt; \
+  --label 'cattle.io/os=linux' \
+  --token &lt;CLUSTER_TOKEN&gt; \
+  --etcd --controlplane</code></pre>
+
+      <p>Pantau status di UI sampai node master muncul. Di master (jika kubeconfig sudah ada):</p>
+      <pre class="code-block"><code>sudo kubectl get nodes
+sudo journalctl -u rancher-system-agent -f</code></pre>
+    </article>
+
+    <!-- STEP 4 -->
+    <article class="section-card mb-4" id="step-4">
+      <h2 class="h5"><span class="step-badge">4</span>Join dua Worker</h2>
+      <p>Kembali ke UI registrasi node. Kali ini hanya centang peran <strong>Worker</strong>, lalu salin perintahnya.</p>
+      <p><strong>Jalankan di VM-2 (k8s-worker1):</strong></p>
+      <pre class="code-block"><code>curl -fL https://&lt;IP-RANCHER&gt;/system-agent-install.sh | sudo sh -s - \
+  --server https://&lt;IP-RANCHER&gt; \
+  --label 'cattle.io/os=linux' \
+  --token &lt;CLUSTER_TOKEN&gt; \
+  --worker</code></pre>
+
+      <p><strong>Jalankan di VM-3 (k8s-worker2):</strong></p>
+      <pre class="code-block"><code>curl -fL https://&lt;IP-RANCHER&gt;/system-agent-install.sh | sudo sh -s - \
+  --server https://&lt;IP-RANCHER&gt; \
+  --label 'cattle.io/os=linux' \
+  --token &lt;CLUSTER_TOKEN&gt; \
+  --worker</code></pre>
+
+      <p>Pastikan ketiga node terlihat di halaman <strong>Nodes</strong>. Cek agen:</p>
+      <pre class="code-block"><code>sudo systemctl status rancher-system-agent --no-pager
+sudo docker ps   # atau crictl/ps runtime yang dipakai node</code></pre>
+    </article>
+
+    <!-- STEP 5 -->
+    <article class="section-card mb-4" id="step-5">
+      <h2 class="h5"><span class="step-badge">5</span>Verifikasi cluster dengan kubectl</h2>
+      <p>Unduh kubeconfig dari Rancher (Cluster → Download KubeConfig), lalu di workstation:</p>
+      <pre class="code-block"><code>mkdir -p ~/.kube
+# simpan file sebagai ~/.kube/config-lab-3vm.yaml
+export KUBECONFIG=~/.kube/config-lab-3vm.yaml
+
+kubectl cluster-info
+kubectl get nodes -o wide
+kubectl get pods -A
+kubectl get componentstatuses 2&gt;/dev/null || kubectl get --raw='/readyz?verbose'</code></pre>
+
+      <p>Contoh keluaran yang diharapkan:</p>
+      <pre class="code-block"><code>NAME           STATUS   ROLES                       AGE   VERSION
+k8s-master     Ready    control-plane,etcd,master   15m   v1.xx.x
+k8s-worker1    Ready    worker                      12m   v1.xx.x
+k8s-worker2    Ready    worker                      12m   v1.xx.x</code></pre>
+
+      <p>Jika semua node <mark>Ready</mark> dan Pod sistem (cattle, coredns, dll.) berjalan, lab 3 VM siap.</p>
+    </article>
+
+    <!-- STEP 6 bonus -->
+    <article class="section-card mb-4" id="step-6">
+      <h2 class="h5"><span class="step-badge">6</span>Uji deploy aplikasi contoh</h2>
+      <p>Deploy Nginx sederhana untuk membuktikan worker menerima workload:</p>
+      <pre class="code-block"><code>kubectl create deployment demo-nginx --image=nginx:1.25 --replicas=2
+kubectl expose deployment demo-nginx --port=80 --type=NodePort
+kubectl get deploy,pods,svc -o wide
+kubectl get pods -o wide   # lihat Pod tersebar di worker</code></pre>
+
+      <p>Hapus jika hanya untuk uji:</p>
+      <pre class="code-block"><code>kubectl delete service demo-nginx
+kubectl delete deployment demo-nginx</code></pre>
+    </article>
+
+    <section class="section-card mb-4">
+      <h2 class="h5">Troubleshooting CLI singkat</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered table-lab align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Gejala</th>
+              <th>Perintah cek</th>
+              <th>Arah perbaikan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Node NotReady</td>
+              <td><code>kubectl describe node &lt;nama&gt;</code></td>
+              <td>Cek CNI, disk, waktu NTP, agen Rancher</td>
+            </tr>
+            <tr>
+              <td>Gagal curl registrasi</td>
+              <td><code>curl -vk https://&lt;IP-RANCHER&gt;</code></td>
+              <td>Firewall / sertifikat / IP salah</td>
+            </tr>
+            <tr>
+              <td>Pod Pending</td>
+              <td><code>kubectl describe pod &lt;pod&gt;</code></td>
+              <td>Resource worker kurang / taint</td>
+            </tr>
+            <tr>
+              <td>Agen mati</td>
+              <td><code>sudo journalctl -u rancher-system-agent -e</code></td>
+              <td>Restart agen / daftar ulang node</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 class="h5">Tips sukses lab</h2>
+      <ol>
+        <li>Samakan zona waktu: <code>sudo timedatectl set-ntp true</code></li>
+        <li>Jangan campur IP publik &amp; privat tanpa aturan jelas</li>
+        <li>Simpan bootstrap password, token cluster, dan kubeconfig dengan aman</li>
+        <li>Dokumentasikan setiap error — itu bagian dari belajar</li>
+      </ol>
+      <p class="mb-0">Lanjut ke <a href="media.html">halaman media</a> atau <a href="praktik.html">form praktik</a>.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer py-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <div><strong>EduRancher Lab</strong><br><small>Hanry Roslaw Saputra · 13020321233123 · IF203</small></div>
+      <div class="small">Pemrograman Web I · Riad Sahara, S.SI., M.T.</div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

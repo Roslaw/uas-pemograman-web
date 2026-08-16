@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Praktik — EduRancher Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+</head>
+<body data-page="praktik">
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg navbar-dark container py-3">
+      <a class="navbar-brand brand-lockup" href="index.html">
+        <span class="brand-mark">K8s</span>
+        <span><strong>EduRancher Lab</strong><br><small class="opacity-75">Pemrograman Web I · UNSIA</small></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" data-nav="beranda" href="index.html">Beranda</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="konsep" href="konsep.html">Konsep</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="arsitektur" href="arsitektur.html">Arsitektur</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="panduan" href="panduan.html">Panduan</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="media" href="media.html">Media</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="praktik" href="praktik.html">Praktik</a></li>
+        </ul>
+        <span id="live-clock" class="ms-lg-3"></span>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container py-4 py-lg-5">
+    <header class="mb-4">
+      <h1>Praktik Interaktif</h1>
+      <p class="lead">Form HTML (Sesi 9) + validasi &amp; kuis JavaScript.</p>
+    </header>
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <article class="section-card">
+          <h2 class="h5 mb-3">Form pendaftaran lab Rancher</h2>
+          <div id="form-feedback" class="alert" role="alert"></div>
+
+          <form id="form-praktik" action="#" method="post" novalidate>
+            <fieldset class="border rounded p-3 mb-3">
+              <legend class="float-none w-auto px-2 fs-6">Identitas peserta</legend>
+              <div class="mb-3">
+                <label for="nama" class="form-label">Nama lengkap</label>
+                <input type="text" class="form-control" id="nama" name="nama" placeholder="nama Anda..." required>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="nama@unsia.ac.id" required>
+              </div>
+              <div class="mb-0">
+                <label for="peran" class="form-label">Peran di lab</label>
+                <select class="form-select" id="peran" name="peran" required>
+                  <option value="">-- pilih peran --</option>
+                  <option value="operator-rancher">Operator Rancher</option>
+                  <option value="admin-master">Admin node master</option>
+                  <option value="admin-worker">Admin node worker</option>
+                  <option value="observer">Observer / dokumentator</option>
+                </select>
+              </div>
+            </fieldset>
+
+            <fieldset class="border rounded p-3 mb-3">
+              <legend class="float-none w-auto px-2 fs-6">Pengalaman</legend>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="pengalaman" id="exp-linux" value="linux">
+                <label class="form-check-label" for="exp-linux">Linux / SSH dasar</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="pengalaman" id="exp-docker" value="docker">
+                <label class="form-check-label" for="exp-docker">Docker / kontainer</label>
+              </div>
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="pengalaman" id="exp-k8s" value="k8s">
+                <label class="form-check-label" for="exp-k8s">Kubernetes dasar</label>
+              </div>
+
+              <p class="mb-2 fw-semibold">Mode belajar yang dipilih</p>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="mode" id="mode-self" value="mandiri" checked>
+                <label class="form-check-label" for="mode-self">Mandiri</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="mode" id="mode-group" value="kelompok">
+                <label class="form-check-label" for="mode-group">Kelompok</label>
+              </div>
+            </fieldset>
+
+            <div class="mb-3">
+              <label for="topik" class="form-label">Topik minat / catatan</label>
+              <textarea class="form-control" id="topik" name="topik" rows="4" placeholder="Contoh: ingin fokus join worker via Rancher..." required></textarea>
+            </div>
+
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="setuju" name="setuju" value="ya">
+              <label class="form-check-label" for="setuju">Saya setuju data ini hanya untuk simulasi form UAS.</label>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary" name="submit" value="kirim">Kirim pendaftaran</button>
+              <button type="reset" class="btn btn-outline-secondary">Reset</button>
+            </div>
+          </form>
+
+          <pre id="preview-data" class="bg-light border rounded p-3 mt-3 d-none small"></pre>
+        </article>
+      </div>
+
+      <div class="col-lg-5">
+        <article class="section-card mb-4">
+          <h2 class="h5">Kuis cepat (JavaScript)</h2>
+          <p>Komponen mana yang berada di <strong>VM master</strong> pada lab 3 VM?</p>
+          <p id="score-board" class="mb-3">Skor: —</p>
+          <div id="quiz-box" data-answer="control-plane">
+            <div class="quiz-option" data-value="only-app">Hanya aplikasi frontend mahasiswa</div>
+            <div class="quiz-option" data-value="control-plane">API Server, etcd, Scheduler (control-plane)</div>
+            <div class="quiz-option" data-value="only-cni">Hanya plugin CNI tanpa kubelet</div>
+          </div>
+          <div id="quiz-result" class="alert d-none" role="status"></div>
+          <button type="button" id="quiz-reset" class="btn btn-sm btn-outline-primary mt-2">Ulangi kuis</button>
+        </article>
+
+        <aside class="toc-aside">
+          <h2 class="h6">Yang ditunjukkan di halaman ini</h2>
+          <ul class="small mb-0">
+            <li>Form + fieldset/legend</li>
+            <li>input text, email, checkbox, radio, select, textarea</li>
+            <li>Validasi JavaScript + localStorage</li>
+            <li>Interaksi DOM pada opsi kuis</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer py-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <div><strong>EduRancher Lab</strong><br><small>Hanry Roslaw Saputra · 13020321233123 · IF203</small></div>
+      <div class="small">Pemrograman Web I · Riad Sahara, S.SI., M.T.</div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

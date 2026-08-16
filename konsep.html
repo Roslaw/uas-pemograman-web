@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Konsep — EduRancher Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+</head>
+<body data-page="konsep">
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg navbar-dark container py-3">
+      <a class="navbar-brand brand-lockup" href="index.html">
+        <span class="brand-mark">K8s</span>
+        <span><strong>EduRancher Lab</strong><br><small class="opacity-75">Pemrograman Web I · UNSIA</small></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" data-nav="beranda" href="index.html">Beranda</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="konsep" href="konsep.html">Konsep</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="arsitektur" href="arsitektur.html">Arsitektur</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="panduan" href="panduan.html">Panduan</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="media" href="media.html">Media</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="praktik" href="praktik.html">Praktik</a></li>
+        </ul>
+        <span id="live-clock" class="ms-lg-3"></span>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container py-4 py-lg-5">
+    <header class="mb-4">
+      <h1>Konsep Kubernetes &amp; Rancher</h1>
+      <p class="lead">Dasar teori singkat sebelum merakit cluster 3 VM.</p>
+    </header>
+
+    <div class="row g-4 align-items-start">
+      <div class="col-lg-8">
+        <article class="section-card mb-4">
+          <h2 class="h4">Apa itu Kubernetes?</h2>
+          <p>
+            <strong>Kubernetes (K8s)</strong> adalah platform orkestrasi kontainer yang mengatur penjadwalan,
+            penskalaan, dan pemulihan aplikasi. Cluster terdiri dari node <em>control-plane</em> (master)
+            dan node <em>worker</em>.
+          </p>
+          <p>
+            Istilah penting: <b>Pod</b> (unit deploy), <i>Deployment</i> (menjaga replika),
+            <u>Service</u> (akses jaringan stabil), dan <mark>Namespace</mark> (isolasi logis).
+          </p>
+          <figure class="mb-0">
+            <img src="assets/images/konsep-k8s.png" class="img-fluid rounded border" width="1100" height="520" alt="Ilustrasi komponen control-plane dan worker Kubernetes">
+            <figcaption class="mt-2 small text-secondary">Gambar. Control-plane mengatur cluster; worker menjalankan Pod.</figcaption>
+          </figure>
+        </article>
+
+        <article class="section-card mb-4">
+          <h2 class="h4">Apa itu Rancher?</h2>
+          <p>
+            <strong>Rancher</strong> menyediakan antarmuka manajemen untuk membuat dan mengoperasikan cluster Kubernetes.
+            Alih-alih merangkai semua komponen control-plane secara manual, Anda dapat:
+          </p>
+          <ul>
+            <li>Membuat cluster dari UI Rancher</li>
+            <li>Menjalankan perintah registrasi (<code>curl ... | sh</code>) pada VM master/worker</li>
+            <li>Memantau kesehatan node dan workload</li>
+          </ul>
+          <p>Contoh perintah yang sering muncul di lab (nilai token diganti dari UI):</p>
+          <pre class="code-block"><code># Di host Rancher — jalankan server
+sudo docker run -d --restart=unless-stopped \
+  -p 80:80 -p 443:443 --privileged \
+  --name rancher rancher/rancher:latest
+
+# Di node (setelah Create Cluster di UI) — contoh join worker
+curl -fL https://&lt;IP-RANCHER&gt;/system-agent-install.sh | sudo sh -s - \
+  --server https://&lt;IP-RANCHER&gt; \
+  --token &lt;CLUSTER_TOKEN&gt; \
+  --worker</code></pre>
+          <p class="mb-0">
+            Detail langkah lengkap ada di halaman <a href="panduan.html">Panduan</a>.
+          </p>
+        </article>
+
+        <article class="section-card mb-4">
+          <h2 class="h4">Perintah kubectl dasar (wajib dikenal)</h2>
+          <p>Setelah cluster Ready, perintah berikut paling sering dipakai:</p>
+          <pre class="code-block"><code>kubectl get nodes -o wide
+kubectl get pods -A
+kubectl describe node k8s-master
+kubectl create deployment demo --image=nginx
+kubectl get deploy,svc
+kubectl logs deploy/demo
+kubectl delete deployment demo</code></pre>
+        </article>
+
+        <article class="section-card">
+          <h2 class="h4">Glosarium singkat</h2>
+          <dl class="row mb-0">
+            <dt class="col-sm-3">Control-plane</dt>
+            <dd class="col-sm-9">Otak cluster: API server, scheduler, controller, etcd.</dd>
+            <dt class="col-sm-3">Worker</dt>
+            <dd class="col-sm-9">Node yang menjalankan Pod aplikasi lewat kubelet.</dd>
+            <dt class="col-sm-3">etcd</dt>
+            <dd class="col-sm-9">Basis data key-value untuk state cluster.</dd>
+            <dt class="col-sm-3">CNI</dt>
+            <dd class="col-sm-9">Plugin jaringan antar Pod (misalnya Canal/Calico).</dd>
+          </dl>
+        </article>
+      </div>
+
+      <aside class="col-lg-4">
+        <div class="sidebar-stack">
+          <div class="toc-aside mb-3">
+            <h2 class="h5">Spoiler teknis</h2>
+            <p class="small text-secondary">Elemen <code>&lt;details&gt;</code> / <code>&lt;summary&gt;</code> (Materi Sesi 10).</p>
+            <details class="mb-2">
+              <summary>Kenapa bukan single-node saja?</summary>
+              Single-node bagus untuk uji cepat, tetapi 3 VM lebih mirip produksi: control-plane terpisah dari workload.
+            </details>
+            <details class="mb-2">
+              <summary>Apakah master boleh menjalankan Pod?</summary>
+              Bisa (taint dihapus), tetapi di lab ini master dikhususkan untuk control-plane agar konsepnya jelas.
+            </details>
+            <details>
+              <summary>Versi yang dipakai?</summary>
+              Gunakan rilis Rancher/K8s stabil yang didukung dokumentasi resmi saat praktikum.
+            </details>
+            <p class="small mt-3 mb-0">Spoiler dibuka: <strong id="spoiler-count">0</strong> kali</p>
+          </div>
+
+          <div class="section-card">
+            <h2 class="h5">Contoh nilai warna CSS</h2>
+            <p class="small mb-2">Demonstrasi 5 cara menulis warna (Sesi 15).</p>
+            <div class="row g-2">
+              <div class="col-6"><div class="swatch color-swatch-name">nama: teal</div></div>
+              <div class="col-6"><div class="swatch color-swatch-hex">hex #1f6f8b</div></div>
+              <div class="col-6"><div class="swatch color-swatch-rgb">rgb()</div></div>
+              <div class="col-6"><div class="swatch color-swatch-rgba">rgba()</div></div>
+              <div class="col-12"><div class="swatch color-swatch-hsl">hsl()</div></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer py-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <div><strong>EduRancher Lab</strong><br><small>Hanry Roslaw Saputra · 13020321233123 · IF203</small></div>
+      <div class="small">Pemrograman Web I · Riad Sahara, S.SI., M.T.</div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

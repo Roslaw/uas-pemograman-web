@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">Arsitektur 3 VM Kubernetes dengan Rancher</title>
+  <desc id="desc">Satu VM master dan dua VM worker di bawah manajemen Rancher</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1f33"/>
+      <stop offset="100%" stop-color="#12324c"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect width="960" height="420" rx="18" fill="url(#bg)"/>
+  <text x="48" y="52" fill="#e8f1f8" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">Cluster Lab: Rancher + 3 VM</text>
+  <text x="48" y="82" fill="#9fb6c9" font-family="Segoe UI, Arial, sans-serif" font-size="14">Master + Worker + Worker (contoh edukasi)</text>
+
+  <g filter="url(#shadow)">
+    <rect x="300" y="110" width="360" height="70" rx="12" fill="#1f6f8b"/>
+    <text x="480" y="142" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">Rancher UI / Management</text>
+    <text x="480" y="164" text-anchor="middle" fill="#d7eef6" font-family="Segoe UI, Arial, sans-serif" font-size="12">Provisioning &amp; monitoring cluster</text>
+  </g>
+
+  <line x1="480" y1="180" x2="480" y2="220" stroke="#7ec8e3" stroke-width="3"/>
+  <line x1="180" y1="220" x2="780" y2="220" stroke="#7ec8e3" stroke-width="3"/>
+  <line x1="180" y1="220" x2="180" y2="250" stroke="#7ec8e3" stroke-width="3"/>
+  <line x1="480" y1="220" x2="480" y2="250" stroke="#7ec8e3" stroke-width="3"/>
+  <line x1="780" y1="220" x2="780" y2="250" stroke="#7ec8e3" stroke-width="3"/>
+
+  <g filter="url(#shadow)">
+    <rect x="70" y="250" width="220" height="120" rx="12" fill="#f0b429"/>
+    <text x="180" y="290" text-anchor="middle" fill="#1a1a1a" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">VM-1 Master</text>
+    <text x="180" y="318" text-anchor="middle" fill="#333" font-family="Segoe UI, Arial, sans-serif" font-size="13">control-plane</text>
+    <text x="180" y="342" text-anchor="middle" fill="#333" font-family="Segoe UI, Arial, sans-serif" font-size="12">API Server · etcd · Scheduler</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="370" y="250" width="220" height="120" rx="12" fill="#2a9d8f"/>
+    <text x="480" y="290" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">VM-2 Worker</text>
+    <text x="480" y="318" text-anchor="middle" fill="#e8fff9" font-family="Segoe UI, Arial, sans-serif" font-size="13">kubelet · kube-proxy</text>
+    <text x="480" y="342" text-anchor="middle" fill="#e8fff9" font-family="Segoe UI, Arial, sans-serif" font-size="12">Menjalankan Pod aplikasi</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="670" y="250" width="220" height="120" rx="12" fill="#2a9d8f"/>
+    <text x="780" y="290" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">VM-3 Worker</text>
+    <text x="780" y="318" text-anchor="middle" fill="#e8fff9" font-family="Segoe UI, Arial, sans-serif" font-size="13">kubelet · kube-proxy</text>
+    <text x="780" y="342" text-anchor="middle" fill="#e8fff9" font-family="Segoe UI, Arial, sans-serif" font-size="12">Menjalankan Pod aplikasi</text>
+  </g>
+</svg>

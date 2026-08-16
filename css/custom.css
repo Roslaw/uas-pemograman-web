@@ -1,0 +1,258 @@
+/* Custom CSS — selektor tag, class, id & nilai warna (Materi Sesi 14–15) */
+
+:root {
+  --brand-ink: #0b1f33;
+  --brand-sea: #1f6f8b;
+  --brand-mint: #2a9d8f;
+  --brand-sand: #f0b429;
+  --brand-cloud: #f4f7fa;
+  --brand-muted: #5b6b7a;
+  --radius: 14px;
+  --shadow: 0 12px 30px rgba(11, 31, 51, 0.12);
+}
+
+/* 1) Selektor Tag */
+body {
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  color: var(--brand-ink);
+  background-color: var(--brand-cloud);
+  background-image:
+    radial-gradient(circle at 10% 0%, rgba(31, 111, 139, 0.12), transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(42, 157, 143, 0.12), transparent 35%),
+    linear-gradient(180deg, #eef3f7 0%, #f7fafc 40%, #eef2f5 100%);
+  min-height: 100vh;
+}
+
+h1, h2, h3 {
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--brand-sea);
+}
+
+mark {
+  background-color: #ffe08a;
+  padding: 0 0.2em;
+  border-radius: 4px;
+}
+
+/* 2) Selektor Class */
+.site-header {
+  background: linear-gradient(120deg, var(--brand-ink), #143652 55%, var(--brand-sea));
+  color: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--brand-sand);
+  color: var(--brand-ink);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.hero-panel {
+  border-radius: calc(var(--radius) + 4px);
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+.hero-copy {
+  padding: 2.5rem;
+}
+
+.hero-visual {
+  min-height: 280px;
+  background: linear-gradient(160deg, #0b1f33, #1f6f8b);
+}
+
+.hero-visual img {
+  max-height: 320px;
+  width: auto;
+  object-fit: contain;
+}
+
+.code-block {
+  background: #0d1117;
+  color: #d7e3ee;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin-bottom: 0.75rem;
+}
+
+.code-block code {
+  color: inherit;
+  font-family: Consolas, "Courier New", monospace;
+  white-space: pre;
+}
+
+.section-card {
+  background: #ffffff;
+  border: 1px solid #d9e3ec;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  /* tinggi mengikuti isi; pakai kelas Bootstrap h-100 hanya jika sengaja disamakan */
+  box-shadow: 0 8px 18px rgba(11, 31, 51, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.section-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.step-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--brand-mint);
+  color: #ffffff;
+  font-weight: 700;
+  margin-right: 0.5rem;
+}
+
+.table-lab th {
+  background-color: var(--brand-ink);
+  color: #ffffff;
+}
+
+.media-frame {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid #d5e0ea;
+  background: #0f2436;
+}
+
+.quiz-option {
+  cursor: pointer;
+  border: 1px solid #c9d6e2;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.65rem;
+  background: #fff;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.quiz-option:hover,
+.quiz-option.is-selected {
+  border-color: var(--brand-sea);
+  background-color: #e8f5f8;
+}
+
+.quiz-option.is-correct {
+  border-color: #1f8a5b;
+  background-color: #e8f8ef;
+}
+
+.quiz-option.is-wrong {
+  border-color: #c0392b;
+  background-color: #fdeceb;
+}
+
+.toc-aside {
+  background: #ffffff;
+  border-left: 4px solid var(--brand-sand);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.sidebar-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: auto;
+  align-self: flex-start;
+  width: 100%;
+}
+
+.site-footer {
+  background-color: var(--brand-ink);
+  color: #d7e3ee;
+  margin-top: 3rem;
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeUp 0.7s ease forwards;
+}
+
+.fade-up-delay {
+  animation-delay: 0.15s;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 3) Selektor ID */
+#live-clock {
+  font-variant-numeric: tabular-nums;
+  color: #b8d7e8;
+  font-size: 0.9rem;
+}
+
+#form-feedback {
+  display: none;
+}
+
+#form-feedback.show {
+  display: block;
+}
+
+#score-board {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--brand-sea);
+}
+
+/* Nilai warna: nama, hex, rgb, rgba, hsl (Materi Sesi 15) */
+.color-swatch-name { background-color: teal; }
+.color-swatch-hex { background-color: #1f6f8b; }
+.color-swatch-rgb { background-color: rgb(42, 157, 143); }
+.color-swatch-rgba { background-color: rgba(240, 180, 41, 0.85); }
+.color-swatch-hsl { background-color: hsl(204, 64%, 12%); color: white; }
+
+.swatch {
+  height: 48px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.navbar .nav-link.active {
+  color: var(--brand-sand) !important;
+  font-weight: 600;
+}
+
+@media (max-width: 767.98px) {
+  .hero-copy {
+    padding: 1.5rem;
+  }
+}

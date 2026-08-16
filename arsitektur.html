@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arsitektur 3 VM — EduRancher Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+</head>
+<body data-page="arsitektur">
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg navbar-dark container py-3">
+      <a class="navbar-brand brand-lockup" href="index.html">
+        <span class="brand-mark">K8s</span>
+        <span><strong>EduRancher Lab</strong><br><small class="opacity-75">Pemrograman Web I · UNSIA</small></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" data-nav="beranda" href="index.html">Beranda</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="konsep" href="konsep.html">Konsep</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="arsitektur" href="arsitektur.html">Arsitektur</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="panduan" href="panduan.html">Panduan</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="media" href="media.html">Media</a></li>
+          <li class="nav-item"><a class="nav-link" data-nav="praktik" href="praktik.html">Praktik</a></li>
+        </ul>
+        <span id="live-clock" class="ms-lg-3"></span>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container py-4 py-lg-5">
+    <header class="mb-4">
+      <h1>Arsitektur Lab: 3 Virtual Machine</h1>
+      <p class="lead">Satu master + dua worker di bawah manajemen Rancher.</p>
+    </header>
+
+    <figure class="section-card mb-4 p-3">
+      <img src="assets/images/arsitektur-3vm.png" class="img-fluid rounded" width="1200" height="640" alt="Diagram arsitektur Rancher dengan 3 VM">
+      <figcaption class="mt-2 text-secondary">
+        Gambar 1. Diagram logis cluster edukasi — Rancher mengelola VM-1 (master), VM-2 &amp; VM-3 (worker).
+      </figcaption>
+    </figure>
+
+    <section class="section-card mb-4">
+      <h2 class="h4 mb-3">Tabel spesifikasi contoh lab</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover table-lab align-middle mb-0">
+          <thead>
+            <tr>
+              <th>VM</th>
+              <th>Peran</th>
+              <th>vCPU</th>
+              <th>RAM</th>
+              <th>Disk</th>
+              <th>OS contoh</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>VM-1</td>
+              <td><strong>Master / control-plane</strong></td>
+              <td>2</td>
+              <td>4 GB</td>
+              <td>40 GB</td>
+              <td>Ubuntu Server 22.04</td>
+            </tr>
+            <tr>
+              <td>VM-2</td>
+              <td>Worker</td>
+              <td>2</td>
+              <td>4 GB</td>
+              <td>40 GB</td>
+              <td>Ubuntu Server 22.04</td>
+            </tr>
+            <tr>
+              <td>VM-3</td>
+              <td>Worker</td>
+              <td>2</td>
+              <td>4 GB</td>
+              <td>40 GB</td>
+              <td>Ubuntu Server 22.04</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small text-secondary mt-3 mb-0">Spesifikasi bersifat contoh edukasi; sesuaikan dengan resource hypervisor Anda (VirtualBox, VMware, Proxmox, dsb.).</p>
+    </section>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <article class="section-card h-100">
+          <h2 class="h5">Komponen di Master</h2>
+          <ol>
+            <li>API Server — pintu masuk cluster</li>
+            <li>etcd — penyimpanan state</li>
+            <li>Scheduler — menempatkan Pod ke worker</li>
+            <li>Controller Manager — menjaga kondisi diinginkan</li>
+          </ol>
+        </article>
+      </div>
+      <div class="col-md-6">
+        <article class="section-card h-100">
+          <h2 class="h5">Komponen di Worker</h2>
+          <ul>
+            <li>kubelet — agen node</li>
+            <li>kube-proxy — aturan jaringan Service</li>
+            <li>Container runtime (containerd/Docker)</li>
+            <li>Pod aplikasi mahasiswa / demo</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+
+    <section class="section-card mt-4">
+      <h2 class="h5">Checklist jaringan lab</h2>
+      <p>Pastikan ketiga VM saling terhubung dan dapat mencapai server Rancher:</p>
+      <ul>
+        <li>IP statis atau DHCP reservation untuk setiap VM</li>
+        <li>Hostname unik: <code>k8s-master</code>, <code>k8s-worker1</code>, <code>k8s-worker2</code></li>
+        <li>Port yang dibutuhkan Rancher/K8s tidak diblok firewall lokal</li>
+        <li>Sinkronisasi waktu (NTP) agar sertifikat tidak bermasalah</li>
+      </ul>
+      <h3 class="h6">Perintah cek cepat di tiap VM</h3>
+      <pre class="code-block mb-0"><code>hostnamectl
+ip a
+ping -c 2 192.168.56.11
+ping -c 2 &lt;IP-RANCHER&gt;
+timedatectl status
+sudo ufw status || true</code></pre>
+    </section>
+  </main>
+
+  <footer class="site-footer py-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <div><strong>EduRancher Lab</strong><br><small>Hanry Roslaw Saputra · 13020321233123 · IF203</small></div>
+      <div class="small">Pemrograman Web I · Riad Sahara, S.SI., M.T.</div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
