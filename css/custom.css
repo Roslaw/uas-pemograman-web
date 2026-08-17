@@ -1,4 +1,6 @@
-/* Custom CSS — selektor tag, class, id & nilai warna (Materi Sesi 14–15) */
+/* Custom CSS situs EduRancher Lab (Sesi 14–15).
+   Di sini ada selektor tag, class, id, plus 5 cara nulis warna.
+   Variabel :root biar warna merek gampang diubah di satu tempat. */
 
 :root {
   --brand-ink: #0b1f33;
@@ -11,7 +13,7 @@
   --shadow: 0 12px 30px rgba(11, 31, 51, 0.12);
 }
 
-/* 1) Selektor Tag */
+/* 1) Selektor tag: atur font, latar, link, sama highlight <mark> */
 body {
   font-family: "Source Sans 3", "Segoe UI", sans-serif;
   color: var(--brand-ink);
@@ -39,7 +41,7 @@ mark {
   border-radius: 4px;
 }
 
-/* 2) Selektor Class */
+/* 2) Selektor class: header, kartu, kode, kuis, footer */
 .site-header {
   background: linear-gradient(120deg, var(--brand-ink), #143652 55%, var(--brand-sea));
   color: #ffffff;
@@ -86,6 +88,7 @@ mark {
   object-fit: contain;
 }
 
+/* Kotak perintah CLI biar keliatan kayak terminal */
 .code-block {
   background: #0d1117;
   color: #d7e3ee;
@@ -143,6 +146,7 @@ mark {
   background: #0f2436;
 }
 
+/* Opsi kuis: hover, benar, salah */
 .quiz-option {
   cursor: pointer;
   border: 1px solid #c9d6e2;
@@ -208,7 +212,7 @@ mark {
   }
 }
 
-/* 3) Selektor ID */
+/* 3) Selektor ID: jam, pesan form, papan skor */
 #live-clock {
   font-variant-numeric: tabular-nums;
   color: #b8d7e8;
@@ -229,7 +233,7 @@ mark {
   color: var(--brand-sea);
 }
 
-/* Nilai warna: nama, hex, rgb, rgba, hsl (Materi Sesi 15) */
+/* 5 cara nulis warna: nama, hex, rgb, rgba, hsl (Sesi 15) */
 .color-swatch-name { background-color: teal; }
 .color-swatch-hex { background-color: #1f6f8b; }
 .color-swatch-rgb { background-color: rgb(42, 157, 143); }
@@ -246,11 +250,13 @@ mark {
   font-weight: 600;
 }
 
+/* Menu aktif dikasih warna pasir biar gampang kelihatan */
 .navbar .nav-link.active {
   color: var(--brand-sand) !important;
   font-weight: 600;
 }
 
+/* HP: rapetin padding banner */
 @media (max-width: 767.98px) {
   .hero-copy {
     padding: 1.5rem;

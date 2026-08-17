@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<!--
+  Halaman panduan langkah-langkah. Tiap langkah dikasih id (step-1 dst)
+  biar gampang dilompatin. Perintah CLI ditaruh di <pre><code>.
+-->
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -9,8 +13,12 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="css/custom.css" rel="stylesheet">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/images/favicon-32.png">
 </head>
 <body data-page="panduan">
+  <!-- Menu situs -->
   <header class="site-header">
     <nav class="navbar navbar-expand-lg navbar-dark container py-3">
       <a class="navbar-brand brand-lockup" href="index.html">
@@ -38,16 +46,19 @@
       <p class="lead">Dari persiapan VM hingga cluster <mark>Ready</mark> — lengkap dengan perintah CLI.</p>
     </header>
 
+    <!-- Gambar alur 5 langkah lab -->
     <figure class="section-card mb-4 p-3">
       <img src="assets/images/alur-rancher.png" class="img-fluid rounded" width="1100" height="420" alt="Alur lima langkah lab Rancher 3 VM">
       <figcaption class="mt-2 text-secondary">Gambar. Alur lab: siapkan VM → install Rancher → create cluster → join nodes → verifikasi.</figcaption>
     </figure>
 
+    <!-- Pratinjau tampilan CLI -->
     <figure class="section-card mb-4 p-3">
       <img src="assets/images/cli-preview.png" class="img-fluid rounded" width="1100" height="360" alt="Contoh tampilan perintah CLI di terminal">
       <figcaption class="mt-2 text-secondary">Gambar. Pratinjau perintah CLI yang akan Anda jalankan di lab.</figcaption>
     </figure>
 
+    <!-- Asumsi lab: OS, IP contoh, catatan ganti token -->
     <aside class="toc-aside mb-4">
       <h2 class="h6">Asumsi lab edukasi</h2>
       <ul class="mb-2">
@@ -59,7 +70,7 @@
       <p class="small text-secondary mb-0">Perintah di bawah bersifat edukasi lab; sesuaikan versi Rancher/K8s dengan dokumentasi resmi saat praktik.</p>
     </aside>
 
-    <!-- STEP 1 -->
+    <!-- STEP 1: siapkan VM, hostname, uji ping -->
     <article class="section-card mb-4" id="step-1">
       <h2 class="h5"><span class="step-badge">1</span>Siapkan tiga VM (hostname, update, SSH)</h2>
       <p>Buat 3 VM di VirtualBox/VMware/Proxmox. Di <strong>setiap</strong> VM, update sistem dan pasang tools dasar:</p>
@@ -91,7 +102,7 @@ ping -c 3 192.168.56.13
 ssh user@192.168.56.11</code></pre>
     </article>
 
-    <!-- STEP 2 -->
+    <!-- STEP 2: Docker + jalankan Rancher Server -->
     <article class="section-card mb-4" id="step-2">
       <h2 class="h5"><span class="step-badge">2</span>Install Docker &amp; jalankan Rancher</h2>
       <p>Pada <strong>host Rancher</strong> (bisa VM ke-4 atau laptop lab yang cukup RAM), install Docker lalu jalankan Rancher Server:</p>
@@ -123,7 +134,7 @@ sudo docker exec -it rancher reset-password</code></pre>
       <p class="mb-0 small text-secondary">Referensi: <a href="https://ranchermanager.docs.rancher.com/" target="_blank" rel="noopener">Rancher Manager Docs</a></p>
     </article>
 
-    <!-- STEP 3 -->
+    <!-- STEP 3: bikin cluster, daftarkan master -->
     <article class="section-card mb-4" id="step-3">
       <h2 class="h5"><span class="step-badge">3</span>Buat cluster &amp; daftarkan node Master</h2>
       <p>Di UI Rancher:</p>
@@ -151,7 +162,7 @@ curl -fL https://&lt;IP-RANCHER&gt;/system-agent-install.sh | sudo sh -s - \
 sudo journalctl -u rancher-system-agent -f</code></pre>
     </article>
 
-    <!-- STEP 4 -->
+    <!-- STEP 4: join dua worker -->
     <article class="section-card mb-4" id="step-4">
       <h2 class="h5"><span class="step-badge">4</span>Join dua Worker</h2>
       <p>Kembali ke UI registrasi node. Kali ini hanya centang peran <strong>Worker</strong>, lalu salin perintahnya.</p>
@@ -174,7 +185,7 @@ sudo journalctl -u rancher-system-agent -f</code></pre>
 sudo docker ps   # atau crictl/ps runtime yang dipakai node</code></pre>
     </article>
 
-    <!-- STEP 5 -->
+    <!-- STEP 5: cek node Ready pakai kubectl -->
     <article class="section-card mb-4" id="step-5">
       <h2 class="h5"><span class="step-badge">5</span>Verifikasi cluster dengan kubectl</h2>
       <p>Unduh kubeconfig dari Rancher (Cluster → Download KubeConfig), lalu di workstation:</p>
@@ -196,7 +207,7 @@ k8s-worker2    Ready    worker                      12m   v1.xx.x</code></pre>
       <p>Jika semua node <mark>Ready</mark> dan Pod sistem (cattle, coredns, dll.) berjalan, lab 3 VM siap.</p>
     </article>
 
-    <!-- STEP 6 bonus -->
+    <!-- STEP 6: uji deploy Nginx (opsional) -->
     <article class="section-card mb-4" id="step-6">
       <h2 class="h5"><span class="step-badge">6</span>Uji deploy aplikasi contoh</h2>
       <p>Deploy Nginx sederhana untuk membuktikan worker menerima workload:</p>
@@ -210,6 +221,7 @@ kubectl get pods -o wide   # lihat Pod tersebar di worker</code></pre>
 kubectl delete deployment demo-nginx</code></pre>
     </article>
 
+    <!-- Tabel troubleshooting: gejala, perintah cek, arah perbaikan -->
     <section class="section-card mb-4">
       <h2 class="h5">Troubleshooting CLI singkat</h2>
       <div class="table-responsive">
@@ -247,6 +259,7 @@ kubectl delete deployment demo-nginx</code></pre>
       </div>
     </section>
 
+    <!-- Tips penutup + tautan ke media/praktik -->
     <section class="section-card">
       <h2 class="h5">Tips sukses lab</h2>
       <ol>
@@ -259,12 +272,14 @@ kubectl delete deployment demo-nginx</code></pre>
     </section>
   </main>
 
+  <!-- Footer identitas kelompok -->
   <footer class="site-footer py-4">
     <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
       <div><strong>EduRancher Lab</strong><br><small>Hanry Roslaw Saputra · NIM 250401010331 · Kelas IF203<br>Iin Wahyuni · NIM 250401010332 · Kelas IF203</small></div>
       <div class="small">Pemrograman Web I · Riad Sahara, S.SI., M.T.</div>
     </div>
   </footer>
+  <!-- Bootstrap + script.js -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/script.js"></script>
 </body>

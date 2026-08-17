@@ -1,4 +1,5 @@
-/* JavaScript interaktif — validasi form, kuis, jam, highlight navigasi */
+/* JavaScript interaktif situs EduRancher Lab.
+   File ini dipakai semua halaman. Yang nggak ada elemennya, fungsinya langsung skip. */
 
 document.addEventListener("DOMContentLoaded", () => {
   setActiveNav();
@@ -8,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initDetailsTracker();
 });
 
+/* Nandain menu yang lagi dibuka. Cocokkan data-page di <body> sama data-nav di link. */
 function setActiveNav() {
   const page = document.body.dataset.page;
   if (!page) return;
@@ -19,6 +21,7 @@ function setActiveNav() {
   });
 }
 
+/* Jam digital di navbar. Di-update tiap 1 detik, format Indonesia. */
 function startClock() {
   const el = document.getElementById("live-clock");
   if (!el) return;
@@ -35,6 +38,7 @@ function startClock() {
   setInterval(tick, 1000);
 }
 
+/* Validasi form praktik. Kalau lolos, datanya disimpan di localStorage (simulasi aja). */
 function initContactForm() {
   const form = document.getElementById("form-praktik");
   if (!form) return;
@@ -43,7 +47,7 @@ function initContactForm() {
   const preview = document.getElementById("preview-data");
 
   form.addEventListener("submit", (event) => {
-    event.preventDefault();
+    event.preventDefault(); // jangan reload halaman
 
     const nama = form.nama.value.trim();
     const email = form.email.value.trim();
@@ -96,6 +100,7 @@ function initContactForm() {
   });
 }
 
+/* Kuis klik-pilih. Jawaban benar ada di data-answer. Setelah jawab, tombol reset bisa ulangi. */
 function initQuiz() {
   const box = document.getElementById("quiz-box");
   if (!box) return;
@@ -108,7 +113,7 @@ function initQuiz() {
 
   options.forEach((opt) => {
     opt.addEventListener("click", () => {
-      if (answered) return;
+      if (answered) return; // sekali jawab, jangan diganti
       answered = true;
       options.forEach((o) => o.classList.remove("is-selected"));
       opt.classList.add("is-selected");
@@ -145,6 +150,7 @@ function initQuiz() {
   }
 }
 
+/* Hitung berapa kali <details> dibuka di halaman konsep. */
 function initDetailsTracker() {
   const counter = document.getElementById("spoiler-count");
   if (!counter) return;
